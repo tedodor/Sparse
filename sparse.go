@@ -2,6 +2,8 @@ package sparse
 
 import (
 	"math"
+//	"time"
+//	"log"
 )
 
 type Sparse struct {
@@ -30,9 +32,15 @@ func (s Sparse) Get(i int) float64 {
 }
 
 func (s Sparse) Cos(t Sparse) float64 {
+//     	start := time.Now()
 	dot := s.dot(t)
+//	log.Println("d: ", time.Since(start))
+//	start = time.Now()
 	snorm := s.norm()
+//	log.Println("s: ", time.Since(start))
+//	start = time.Now()
 	tnorm := t.norm()
+//	log.Println("t: ", time.Since(start))
 	return 1 - (dot / (snorm * tnorm))
 }
 
@@ -50,15 +58,15 @@ func (s Sparse) dot(t Sparse) float64 {
 	return t.dot(s)
 }
 
-func (s Sparse) GetNorm() float64 {
+func (s Sparse) norm() float64 {
 	if s.n != 0 {
 		return s.n
 	} else {
-		return s.norm()
+		return s.getNorm()
 	}
 }
 
-func (s Sparse) norm() float64 {
+func (s Sparse) getNorm() float64 {
 	var sum float64 = 0
 	for _, v := range s.m {
 		sum += v * v
@@ -76,4 +84,9 @@ func CosMatrix(matrix []Sparse, vector Sparse) []float64 {
 	return r
 }
 
+func NormMatrix(m []Sparse) {
+     for _, w := range m {
+     	 _ = w.getNorm()
+     }
+}
 
